@@ -1,0 +1,8 @@
+#!/bin/bash
+
+VOL=$(amixer sget Master | awk '/%/ {gsub(/[\[\]]/,""); print $4}')
+
+echo "${VOL}"
+echo "${VOL}"
+echo "${VOL}"
+echo ""
