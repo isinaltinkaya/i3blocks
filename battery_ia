@@ -1,0 +1,46 @@
+#!/bin/bash
+
+BATTERY=0
+BATTERY_INFO=$(acpi -b | grep "Battery ${BATTERY}")
+BATTERY_INFO2=$(acpi -i | grep "design capacity")
+BATTERY_STATE=$(echo "${BATTERY_INFO}" | grep -wo "Full\|Charging\|Discharging")
+BATTERY_POWER=$(echo "${BATTERY_INFO}" | grep -o '[0-9]\+%' | tr -d '%')
+BATTERY_HEALTH=$(echo "${BATTERY_INFO2}"| grep -o '[0-9]\+%' | tr -d '%')
+BATTERY_REAL=$(($BATTERY_POWER*$BATTERY_HEALTH/100))
+#TIME=$(echo "${BATTERY_INFO}"| grep -o '[0-9][0-9]:[0-9][0-9]:[0-9][0-9:wq]')
+TIME=$(echo "${BATTERY_INFO}"| grep -o '[0-9][0-9]:[0-9][0-9]')
+SHOW_TYPE="$BLOCK_INSTANCE"
+URGENT_VALUE=10
+
+if [[ "$BATTERY_STATE" == "Charging" ]]; then
+	STATE=$(echo "CHR")
+elif [[ "$BATTERY_STATE" == "Discharging" ]]; then
+	STATE=$(echo "BAT")
+elif [[ "$BATTERY_STATE" == "Full" ]]; then
+	STATE=$(echo "FULL")
+fi
+
+if [[ "${SHOW_TYPE}" == "" ]]; then
+	echo "BH $BATTERY_HEALTH% | $STATE ${BATTERY_POWER}% ($TIME)"
+	echo "BH $BATTERY_HEALTH% | $STATE ${BATTERY_POWER}% ($TIME)"
+elif [[ "${SHOW_TYPE}" -eq 1 ]]; then
+	echo "BH $BATTERY_HEALTH% | $STATE ${BATTERY_REAL}% ($TIME)"
+	echo "BH $BATTERY_HEALTH% | $STATE ${BATTERY_REAL}% ($TIME)"
+fi
+
+if [[ "$BATTERY_STATE" == "Discharging" ]]; then
+	if [[ "$BATTERY_POWER" -le 20 ]]; then
+		echo "#FF0000\n"
+	elif [[ "$BATTERY_POWER" -le 40 ]]; then
+		echo "#FFFF00\n"
+	elif [[ "$BATTERY_POWER" -le 60 ]]; then
+		echo "#FF9900\n"
+	elif [[ "$BATTERY_POWER" -le 85 ]]; then
+		echo "#FFFFFF\n"
+	fi
+fi
+
+
+if [[ "${BATTERY_POWER}" -le "${URGENT_VALUE}" ]]; then
+  exit 33
+fi
