@@ -7,7 +7,6 @@ BATTERY_STATE=$(echo "${BATTERY_INFO}" | grep -wo "Full\|Charging\|Discharging")
 BATTERY_POWER=$(echo "${BATTERY_INFO}" | grep -o '[0-9]\+%' | tr -d '%')
 BATTERY_HEALTH=$(echo "${BATTERY_INFO2}"| grep -o '[0-9]\+%' | tr -d '%')
 BATTERY_REAL=$(($BATTERY_POWER*$BATTERY_HEALTH/100))
-#TIME=$(echo "${BATTERY_INFO}"| grep -o '[0-9][0-9]:[0-9][0-9]:[0-9][0-9:wq]')
 TIME=$(echo "${BATTERY_INFO}"| grep -o '[0-9][0-9]:[0-9][0-9]')
 SHOW_TYPE="$BLOCK_INSTANCE"
 URGENT_VALUE=10
