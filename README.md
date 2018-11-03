@@ -1,2 +1,2 @@
-# i3blocks_isinaltinkaya
+# i3blocks_ia
 i3blocks scripts written by isinaltinkaya.
